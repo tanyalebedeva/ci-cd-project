@@ -1,0 +1,11 @@
+# .gitlab-ci.bad.yml
+stages:
+  - build
+
+build_job:
+  stage: build
+  script:
+    - pip install -r requirements.txt
+    - python test_app.py
+    - ssh user@production-server 'mkdir -p /var/www/app'
+    - scp -r ./* user@production-server:/var/www/app
