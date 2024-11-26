@@ -1,17 +1,15 @@
-# .gitlab-ci.yml (плохой пример)
+name: Bad CI/CD Workflow
 
-variables:
-  SECRET_KEY: "my_secret_password"
+on:
+  push: # Запускается, когда есть push в любую ветку
+    branches:
+      - master # Запускается только для ветки master
 
-before_script:
-  - echo "Начало выполнения CI/CD пайплайна"
-
-job:
-  script:
-    - echo "Запуск приложения"
-    - python app.py --secret=${SECRET_KEY}
-    - echo "Тестирование приложения"
-    - python test.py
-    - echo "Деплой приложения"
-    - scp app.py root@192.168.1.100:/var/www/app
-    - echo "Пайплайн завершен"
+jobs:
+  example-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Run bad practice step
+        run: echo "This is a bad practice"
