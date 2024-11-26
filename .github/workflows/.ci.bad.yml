@@ -1,0 +1,28 @@
+name: Bad CI/CD Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  bad-practices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run application (Bad Practice: No build/test step)
+        run: python app.py
+
+      - name: Hardcoded secrets (Bad Practice)
+        run: echo "Hardcoded password: rosesarerosie"
+
+      - name: No dependency check (Bad Practice: No requirements.txt)
+        run: echo "Skipping dependency installation"
+
+      - name: Run tests (Bad Practice: No output validation)
+        run: pytest test.py || true
+
+      - name: Expose sensitive logs (Bad Practice)
+        run: echo "Exposed logs with sensitive data"
