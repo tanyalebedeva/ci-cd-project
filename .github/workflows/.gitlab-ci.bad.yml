@@ -1,0 +1,17 @@
+# .gitlab-ci.yml (плохой пример)
+
+variables:
+  SECRET_KEY: "my_secret_password"
+
+before_script:
+  - echo "Начало выполнения CI/CD пайплайна"
+
+job:
+  script:
+    - echo "Запуск приложения"
+    - python app.py --secret=${SECRET_KEY}
+    - echo "Тестирование приложения"
+    - python test.py
+    - echo "Деплой приложения"
+    - scp app.py root@192.168.1.100:/var/www/app
+    - echo "Пайплайн завершен"
