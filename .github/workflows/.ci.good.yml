@@ -12,7 +12,7 @@ jobs:
       - name: Use Secrets
         env:
           SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: echo "Secrets secured"
+        run: echo "Using secrets securely"
 
       - name: Remove root usage
         run: echo "Performing tasks with minimal privileges"
@@ -24,6 +24,10 @@ jobs:
           key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
       - name: Run tests
         run: pytest tests/
