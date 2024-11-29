@@ -1,28 +1,28 @@
-name: Bad CI/CD Workflow
+name: Bad CI/CD Example
 
-on: 
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
-  bad-practices:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Hardcoded Secret
-        run: echo "Secret password is 123456"
+    - name: Checkout code
+      run: git clone https://github.com/${{ github.repository }} .
+      # Плохая практика: использование прямого git clone вместо официального checkout action.
 
-      - name: Run as root
-        run: sudo rm -rf /
+    - name: Install Python
+      run: sudo apt-get install python3
+      # Плохая практика: системный Python вместо использования версий через actions/setup-python.
 
-      - name: Install dependencies
-        run: |
-          pip install requests flask pytest
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+      # Плохая практика: установка зависимостей без кэширования.
 
-      - name: Skip tests
-        run: echo "No tests needed"
+    - name: Run tests
+      run: python3 -m unittest discover -s .
+      # Плохая практика: запуск без указания конкретных путей и фреймворков.
 
-      - name: Deploy code
-        run: |
-          echo "Deploying to production..."
-          curl -X POST http://example.com/deploy
+    - name: Deploy
+      run: echo "Deploying to production!"
+      # Плохая практика: деплой без проверки успешности тестов.
