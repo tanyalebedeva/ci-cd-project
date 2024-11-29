@@ -1,38 +1,39 @@
-name: Good CI/CD Workflow
+name: Good CI/CD Example
 
-on: 
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
-  good-practices:
+  build:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Use Secrets
-        env:
-          SECRET_PASSWORD: ${{ secrets.SECRET_PASSWORD }}
-        run: echo "Using secrets securely"
+    - name: Checkout code
+      uses: actions/checkout@v3
+      # Исправлено: использование официального экшена для checkout.
 
-      - name: Remove root usage
-        run: echo "Performing tasks with minimal privileges"
+    - name: Setup Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: 3.10
+      # Исправлено: установка Python через официальное действие с указанием версии.
 
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+      # Исправлено: добавлено кэширование зависимостей.
 
-      - name: Install dependencies
-        run: |
-          pip install -r requirements.txt
+    - name: Install dependencies
+      run: pip install -r requirements.txt
 
-      - name: Run tests
-        run: pytest tests/
+    - name: Run tests
+      run: pytest
+      # Исправлено: запуск тестов через pytest для более подробного вывода.
 
-      - name: Deploy code
-        run: |
-          echo "Deploying to production..."
-          curl -X POST http://example.com/deploy --data '{"branch": "master"}'
+    - name: Deploy
+      if: success()
+      run: echo "Deploying to production!"
+      # Исправлено: деплой выполняется только после успешного прохождения всех этапов.
