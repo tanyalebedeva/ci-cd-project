@@ -1,9 +1,11 @@
 import unittest
-from app import main
+from app import add
 
-class TestApp(unittest.TestCase):
-    def test_main(self):
-        self.assertEqual(main(), None)
+class TestAddFunction(unittest.TestCase):
+    def test_add(self):
+        self.assertEqual(add(2, 3), 5)
+        self.assertEqual(add(-1, 1), 0)
+        self.assertEqual(add(0, 0), 0)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
